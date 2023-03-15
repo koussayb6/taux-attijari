@@ -5,21 +5,10 @@ from bs4 import BeautifulSoup
 import smtplib
 import time
 import streamlit as st
-# Add a title and intro text
-st.title('scrap euro/tnd rate')
-# Email settings
-EMAIL_ADDRESS = 'kousssayb6@gmail.com'
-EMAIL_PASSWORD = st.secrets["gmail_app_password"]
+import threading
 
-# Web page settings
-URL = 'https://www.attijaribank.com.tn/Fr/Cours_de_change__59_205'
-
-# Initial amount
-previous_amount = 4.0
-
-# Loop that continuously checks for changes
-while True:
-    # Scrape the web page
+def my_task():
+    st.info("task")
     response = requests.get(URL)
     soup = BeautifulSoup(response.text, 'html.parser')
     data = []
@@ -36,14 +25,14 @@ while True:
     for d in data:
         if d[1] == 'EUR':
             current_amount = float(d[4])
-
+    # Initial amount
+    previous_amount = 4.0
     # Compare the current amount to the previous amount
     if current_amount < previous_amount:
         # Send an email notification
-        st.info("sending: "+ str(datetime.now()))
+        st.info("sending: " + str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-
             subject = 'Amount changed!'
             body = f'The amount is now {current_amount}'
             msg = f'Subject: {subject}\n\n{body}'
@@ -53,6 +42,16 @@ while True:
         # Update the previous amount
         previous_amount = current_amount
         st.info('sent')
+    # schedule the next run in 10 minutes
+    threading.Timer(60, my_task).start()
 
-    # Wait for some time before checking again
-    time.sleep(600)
+
+st.title('scrap euro/tnd rate')
+# Email settings
+EMAIL_ADDRESS = 'kousssayb6@gmail.com'
+EMAIL_PASSWORD = st.secrets["gmail_app_password"]
+
+# Web page settings
+URL = 'https://www.attijaribank.com.tn/Fr/Cours_de_change__59_205'
+
+my_task()
