@@ -40,7 +40,7 @@ while True:
     # Compare the current amount to the previous amount
     if current_amount < previous_amount:
         # Send an email notification
-        st.info("sending: "+ datetime.now())
+        st.info("sending: "+ str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
