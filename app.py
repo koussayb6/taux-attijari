@@ -31,8 +31,8 @@ def my_task():
     # read data from file
     with open(file_path, 'r') as f:
         loaded_data = json.load(f)
-    st.info("Previously saved rate: " + loaded_data)
-    st.info("Current rate: " + current_amount)
+    st.info("Previously saved rate: " + str(loaded_data))
+    st.info("Current rate: " + str(current_amount))
     # Compare the current amount to the previous amount
     if current_amount < loaded_data:
         # Send an email notification
