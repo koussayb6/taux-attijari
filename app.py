@@ -1,9 +1,7 @@
 from datetime import datetime
-
 import requests
 from bs4 import BeautifulSoup
 import smtplib
-import time
 import streamlit as st
 import threading
 import json
@@ -34,7 +32,7 @@ def my_task():
     with open(file_path, 'r') as f:
         loaded_data = json.load(f)
     # Compare the current amount to the previous amount
-    if current_amount < loaded_data["previous"]:
+    if current_amount < loaded_data.previous:
         # Send an email notification
         st.info("sending: " + str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
