@@ -49,7 +49,7 @@ def my_task():
             json.dump(data, f)
         st.info('sent')
     # schedule the next run in 10 minutes
-    threading.Timer(6, my_task).start()
+    threading.Timer(1200, my_task).start()
 
 
 st.title('scrap euro/tnd rate')
