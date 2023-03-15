@@ -42,7 +42,7 @@ def my_task():
         st.session_state.previous = current_amount
         st.info('sent')
     # schedule the next run in 10 minutes
-    threading.Timer(600, my_task).start()
+    #threading.Timer(600, my_task).start()
 
 
 st.title('scrap euro/tnd rate')
