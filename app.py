@@ -6,6 +6,10 @@ import smtplib
 import time
 import streamlit as st
 import threading
+import json
+
+# define the path to the file
+file_path = 'previous.json'
 
 def my_task():
     st.info("task")
@@ -26,8 +30,11 @@ def my_task():
         if d[1] == 'EUR':
             current_amount = float(d[4])
     # Initial amount
+    # read data from file
+    with open(file_path, 'r') as f:
+        loaded_data = json.load(f)
     # Compare the current amount to the previous amount
-    if current_amount < st.session_state.previous:
+    if current_amount < loaded_data["previous"]:
         # Send an email notification
         st.info("sending: " + str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -39,14 +46,15 @@ def my_task():
             smtp.sendmail(EMAIL_ADDRESS, 'boussetta.koussay@gmail.com', msg)
 
         # Update the previous amount
-        st.session_state.previous = current_amount
+        data = {'pevious': current_amount}
+        with open(file_path, 'w') as f:
+            json.dump(data, f)
         st.info('sent')
     # schedule the next run in 10 minutes
-    #threading.Timer(600, my_task).start()
+    threading.Timer(6, my_task).start()
 
 
 st.title('scrap euro/tnd rate')
-st.session_state.previous= 4.0
 # Email settings
 EMAIL_ADDRESS = 'kousssayb6@gmail.com'
 EMAIL_PASSWORD = st.secrets["gmail_app_password"]
