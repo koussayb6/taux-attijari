@@ -26,9 +26,8 @@ def my_task():
         if d[1] == 'EUR':
             current_amount = float(d[4])
     # Initial amount
-    previous_amount = 4.0
     # Compare the current amount to the previous amount
-    if current_amount < previous_amount:
+    if current_amount < st.session_state.previous:
         # Send an email notification
         st.info("sending: " + str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -40,13 +39,14 @@ def my_task():
             smtp.sendmail(EMAIL_ADDRESS, 'boussetta.koussay@gmail.com', msg)
 
         # Update the previous amount
-        previous_amount = current_amount
+        st.session_state.previous = current_amount
         st.info('sent')
     # schedule the next run in 10 minutes
-    threading.Timer(60, my_task).start()
+    threading.Timer(20, my_task).start()
 
 
 st.title('scrap euro/tnd rate')
+st.session_state.previous= 4.0
 # Email settings
 EMAIL_ADDRESS = 'kousssayb6@gmail.com'
 EMAIL_PASSWORD = st.secrets["gmail_app_password"]
