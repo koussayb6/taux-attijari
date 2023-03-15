@@ -32,7 +32,7 @@ def my_task():
     with open(file_path, 'r') as f:
         loaded_data = json.load(f)
     # Compare the current amount to the previous amount
-    if current_amount < loaded_data.previous:
+    if current_amount < loaded_data:
         # Send an email notification
         st.info("sending: " + str(datetime.now()))
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -44,7 +44,7 @@ def my_task():
             smtp.sendmail(EMAIL_ADDRESS, 'boussetta.koussay@gmail.com', msg)
 
         # Update the previous amount
-        data = {'pevious': current_amount}
+        data = current_amount
         with open(file_path, 'w') as f:
             json.dump(data, f)
         st.info('sent')
